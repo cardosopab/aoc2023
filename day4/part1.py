@@ -5,28 +5,30 @@ def sum_of_points(file_name):
         text = file.read().splitlines()
 
     for line in text:
-        card_score = 0
-        cards = []
-        colon_index = line.index(":")
-        card = line[colon_index + 1 : :]
-        guess, result = card.split("|")
-        guess = guess.strip().split(" ")
-        result = result.strip().split(" ")
-        guess = [int(x.strip()) for x in guess if x.strip()]
-        result = [int(x.strip()) for x in result if x.strip()]
+        # win_count = 0
+        first, result = line.split("|")
+        guess = first.split(":")[1]
 
-        for g in guess:
-            if g in result:
-                cards.append(g)
-                if card_score == 0:
-                    card_score = 1
-                else:
-                    card_score *= 2
-        print(card_score)
-        total += card_score
+        guess_nums = [int(x) for x in guess.split()]
+        result_nums = [int(x) for x in result.split()]
+
+        # Match intersecting numbers
+        wins = len(set(guess_nums).intersection(set(result_nums)))
+
+        # Using 2 to the power
+        if wins > 0:
+            total += 2 ** (wins - 1)
+
+        # Using iteration
+        # for i in range(wins):
+        #     if win_count == 0:
+        #         win_count = 1
+        #     else:
+        #         win_count *= 2
+        # total += win_count
 
     return total
 
 
-# print(sum_of_points("day4/example.txt"))  # 13
+print(sum_of_points("day4/example.txt"))  # 13
 print(sum_of_points("day4/puzzle.txt"))  # 1st 44681; final 22488
